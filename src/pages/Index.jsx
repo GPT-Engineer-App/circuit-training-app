@@ -6,7 +6,8 @@ const exercises = [
   {
     name: "Lower Body Power Station",
     description: "Combine Nordic Hamstring Curl, Poliquin Step-ups, and ATG Split Squats for a comprehensive lower body workout.",
-    duration: 60,
+    sets: 3,
+    reps: 10,
     video: "https://images.unsplash.com/photo-1532200846567-1bd8bd5b23aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwxfHxsb3dlciUyMGJvZHklMjBwb3dlciUyMHN0YXRpb24lMjBleGVyY2lzZXxlbnwwfHx8fDE3MTEzMzgwMTF8MA&ixlib=rb-4.0.3&q=80&w=1080",
   },
   {
@@ -25,7 +26,9 @@ const exercises = [
 
 const Index = () => {
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
-  const [timeRemaining, setTimeRemaining] = useState(exercises[currentExerciseIndex].duration);
+  const [timeRemaining, setTimeRemaining] = useState(exercises[currentExerciseIndex].duration || 0);
+  const [currentSet, setCurrentSet] = useState(1);
+  const [currentRep, setCurrentRep] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const toast = useToast();
 
@@ -93,10 +96,23 @@ const Index = () => {
           {currentExercise.name}
         </Heading>
         <Text>{currentExercise.description}</Text>
-        <Progress value={((currentExercise.duration - timeRemaining) / currentExercise.duration) * 100} size="lg" colorScheme="green" width="100%" />
-        <Text fontSize="xl" fontWeight="bold">
-          Time Remaining: {timeRemaining} seconds
-        </Text>
+        {currentExercise.sets && currentExercise.reps ? (
+          <>
+            <Text fontSize="xl" fontWeight="bold">
+              Set: {currentSet} / {currentExercise.sets}
+            </Text>
+            <Text fontSize="xl" fontWeight="bold">
+              Rep: {currentRep} / {currentExercise.reps}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Progress value={((currentExercise.duration - timeRemaining) / currentExercise.duration) * 100} size="lg" colorScheme="green" width="100%" />
+            <Text fontSize="xl" fontWeight="bold">
+              Time Remaining: {timeRemaining} seconds
+            </Text>
+          </>
+        )}
         <HStack spacing={4}>
           <Button leftIcon={<FaBackward />} onClick={handlePrevious} disabled={currentExerciseIndex === 0}>
             Previous
