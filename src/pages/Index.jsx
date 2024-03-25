@@ -28,8 +28,8 @@ const exercises = [
   {
     name: "ATG Slide Pulls",
     description: "Perform slide pulls to target your core and improve stability.",
-    duration: 45,
-    video: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwxfHxhdGclMjBzbGlkZSUyMHB1bGxzJTIwZXhlcmNpc2V8ZW58MHx8fHwxNzExMzM4MDExfDA&ixlib=rb-4.0.3&q=80&w=1080",
+    duration: 300,
+    video: "path/to/transparent/atg-slide-pulls.png",
   },
   {
     name: "BSAA 10x10x10 Band Combo",
@@ -43,19 +43,9 @@ const SetsRepsInput = ({ exerciseName, sets, reps, onSetsChange, onRepsChange })
   return (
     <HStack>
       <Text>{exerciseName}</Text>
-      <Input
-        type="number"
-        value={sets}
-        onChange={(e) => onSetsChange(exerciseName, parseInt(e.target.value))}
-        width="60px"
-      />
+      <Input type="number" value={sets} onChange={(e) => onSetsChange(exerciseName, parseInt(e.target.value))} width="60px" />
       <Text>sets</Text>
-      <Input
-        type="number"
-        value={reps}
-        onChange={(e) => onRepsChange(exerciseName, parseInt(e.target.value))}
-        width="60px"
-      />
+      <Input type="number" value={reps} onChange={(e) => onRepsChange(exerciseName, parseInt(e.target.value))} width="60px" />
       <Text>reps</Text>
     </HStack>
   );
@@ -68,7 +58,7 @@ const Index = () => {
     exercises[currentExerciseIndex].exercises?.reduce((acc, exercise) => {
       acc[exercise.name] = { sets: exercise.sets, reps: exercise.reps };
       return acc;
-    }, {}) || {}
+    }, {}) || {},
   );
   const [isRunning, setIsRunning] = useState(false);
   const toast = useToast();
@@ -158,12 +148,18 @@ const Index = () => {
               }
             />
           ))
-        ) : timeRemaining > 0 ? (
+        ) : currentExercise.name === "ATG Slide Pulls" ? (
           <>
-            <Progress value={((currentExercise.duration - timeRemaining) / currentExercise.duration) * 100} size="lg" colorScheme="green" width="100%" />
             <Text fontSize="xl" fontWeight="bold">
-              Time Remaining: {timeRemaining} seconds
+              {Math.floor(timeRemaining / 60)
+                .toString()
+                .padStart(2, "0")}
+              :{(timeRemaining % 60).toString().padStart(2, "0")}
             </Text>
+            <HStack>
+              <Button onClick={() => setTimeRemaining(300)}>5 min</Button>
+              <Button onClick={() => setTimeRemaining(600)}>10 min</Button>
+            </HStack>
           </>
         ) : (
           <Text>No time remaining</Text>
