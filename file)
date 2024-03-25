@@ -1,0 +1,23 @@
+import sqlite3 from "sqlite3";
+
+const db = new sqlite3.Database("participants.db");
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS participants (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    email TEXT
+  )
+`);
+
+export const addParticipant = (name, email) => {
+  return new Promise((resolve, reject) => {
+    db.run("INSERT INTO participants (name, email) VALUES (?, ?)", [name, email], (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
