@@ -178,9 +178,14 @@ const Index = () => {
             </Button>
           )}
           <Button leftIcon={<FaForward />} onClick={handleNext} disabled={currentExerciseIndex === exercises.length - 1}>
-            Next
+            {currentExerciseIndex === exercises.length - 1 ? "Finish" : "Next"}
           </Button>
         </HStack>
+        {currentExerciseIndex === exercises.length - 1 && (
+          <Button onClick={() => navigate("/")} colorScheme="blue" marginTop={8}>
+            Back to Start Screen
+          </Button>
+        )}
       </VStack>
     </Box>
   );
